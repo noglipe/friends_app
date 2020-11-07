@@ -1,21 +1,6 @@
 # FriendsApp
 
-**TODO: Add description**
+Pequeno programa modo texto que realiza o cadastro de usuários e salva em um arquivo CSV.
 
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `friends_app` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:friends_app, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/friends_app](https://hexdocs.pm/friends_app).
-
+Programa desenvolvido apartir do curso:
+[Programacao Funcional com Elixir](https://www.udemy.com/course/programacao-funcional-com-elixir)
