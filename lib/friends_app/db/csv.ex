@@ -8,11 +8,54 @@ defmodule FriendsApp.DB.CSV do
     case chosen_menu_item do
       %Menu{label: _, id: :create} -> create()
       %Menu{id: :read, label: _} -> read()
-      %Menu{id: :update, label: _} -> Shell.info("update")
+      %Menu{id: :update, label: _} -> update()
       %Menu{id: :delete, label: _} -> delete()
     end
 
     FriendsApp.CLI.Menu.Choice.start()
+  end
+
+  defp update() do
+    Shell.cmd("Clear")
+
+    prompt_message("Digite o email do amigo que deseja atualizar: ")
+    |> search_frind_by_email()
+    |> check_friend_found()
+    |> confirm_update()
+    |> do_update()
+  end
+
+  defp confirm_update(friend) do
+    Shell.cmd("clear")
+    Shell.info("Encontramos...")
+
+    show_friend(friend)
+
+    case Shell.yes?("Deseja realmente autalizar esse amigo?") do
+      true -> friend
+      false -> :error
+    end
+  end
+
+  defp do_update(friend) do
+    Shell.cmd("clear")
+    Shell.info("Agora você irá digitar os novos dados do seu amigo...")
+
+    updated_friend = collect_data()
+
+    get_struct_list_from_csv()
+    |> delete_friend_from_struct_list(friend)
+    |> friend_list_to_csv
+    |> prepare_list_to_save_csv
+    |> save_csv_file()
+
+    updated_friend
+    |> transform_on_wrapped_list()
+    |> prepare_list_to_save_csv()
+    |> save_csv_file([:append])
+
+    Shell.info("Amigo atualizado com sucesso!")
+    Shell.prompt("Pressione ENTER para continuar")
   end
 
   defp delete do
@@ -78,17 +121,17 @@ defmodule FriendsApp.DB.CSV do
     end
   end
 
- defp delete_friend_from_struct_list(list, friend) do
-  list
-  |>Enum.reject(fn elem -> elem.email == friend.email end)
- end
+  defp delete_friend_from_struct_list(list, friend) do
+    list
+    |> Enum.reject(fn elem -> elem.email == friend.email end)
+  end
 
- defp friend_list_to_csv(list) do
-  list
-  |>Enum.map(fn item ->
-    [item.email, item.name, item.phone]
-  end)
- end
+  defp friend_list_to_csv(list) do
+    list
+    |> Enum.map(fn item ->
+      [item.email, item.name, item.phone]
+    end)
+  end
 
   defp read() do
     get_struct_list_from_csv()
